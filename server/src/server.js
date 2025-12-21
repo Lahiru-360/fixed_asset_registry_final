@@ -21,6 +21,11 @@ app.use(cors(corsOptions));
 // Parse JSON
 app.use(express.json());
 
+// Health check endpoint (for Heroku)
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/requests", assetRequestRoutes);
