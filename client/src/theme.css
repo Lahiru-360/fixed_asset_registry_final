@@ -1,0 +1,46 @@
+/* PRIMARY (60%) — Main brand color */
+:root {
+  --primary: 180 65% 40%; /* Teal base */
+  --primary-foreground: 0 0% 100%;
+
+  /* SECONDARY (30%) — Neutral UI color */
+  --secondary: 220 15% 25%; /* Slate-like dark grey */
+  --secondary-foreground: 0 0% 100%;
+
+  /* ACCENT (10%) — Highlight color */
+  --accent: 350 80% 55%; /* Warm red accent */
+  --accent-foreground: 0 0% 100%;
+
+  /* GLOBAL BACKGROUND & TEXT */
+  --background: 0 0% 100%;
+  --foreground: 220 20% 10%;
+
+  /* MUTED Surface */
+  --muted: 220 10% 94%;
+  --muted-foreground: 220 10% 30%;
+
+  --sidebar: 220 15% 95%; /* light gray with slate tint */
+}
+
+.dark {
+  /* PRIMARY (60%) — Slightly brighter in dark */
+  --primary: 180 65% 55%;
+  --primary-foreground: 220 20% 10%;
+
+  /* SECONDARY (30%) */
+  --secondary: 220 15% 70%;
+  --secondary-foreground: 220 20% 10%;
+
+  /* ACCENT (10%) */
+  --accent: 350 80% 65%;
+  --accent-foreground: 220 20% 10%;
+
+  /* GLOBAL */
+  --background: 220 20% 10%;
+  --foreground: 0 0% 98%;
+
+  --muted: 220 10% 20%;
+  --muted-foreground: 220 10% 80%;
+
+  --sidebar: 220 15% 15%; /* deep slate-gray for dark mode */
+}

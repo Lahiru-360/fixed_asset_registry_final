@@ -1,0 +1,148 @@
+@import "./theme.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BACKGROUND TOKENS */
+.bg-background {
+  background-color: hsl(var(--background));
+}
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+.bg-primary {
+  background-color: hsl(var(--primary));
+}
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+.bg-accent {
+  background-color: hsl(var(--accent));
+}
+
+/* TEXT TOKENS */
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+.text-secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+.text-accent-foreground {
+  color: hsl(var(--accent-foreground));
+}
+
+/* PLACEHOLDER TOKENS */
+.placeholder-muted-foreground::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+.placeholder-foreground::placeholder {
+  color: hsl(var(--foreground));
+}
+
+/* BORDER TOKENS */
+.border-primary {
+  border-color: hsl(var(--primary));
+}
+.border-secondary {
+  border-color: hsl(var(--secondary));
+}
+.border-accent {
+  border-color: hsl(var(--accent));
+}
+.border-muted {
+  border-color: hsl(var(--muted));
+}
+
+.bg-sidebar {
+  background-color: hsl(var(--sidebar));
+}
+
+.card {
+  @apply rounded-2xl p-5 bg-muted border border-muted shadow-sm;
+}
+.elev {
+  @apply shadow-md hover:shadow-lg transition-shadow duration-150;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.25s ease-out;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR STYLES
+   ============================================ */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 10px;
+  border: 2px solid hsl(var(--background));
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: hsl(var(--primary) / 0.7);
+}
+
+/* Optional: Thinner scrollbar for specific containers */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Optional: Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: hsl(var(--background));
+}
+
+/* Dark mode date picker icon fix */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
