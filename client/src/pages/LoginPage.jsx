@@ -212,6 +212,45 @@ function LoginPage() {
                 </button>
               </div>
             </form>
+            {/* DEMO CREDENTIALS */}
+            <div className="mt-6 rounded-lg border border-muted bg-muted/40 p-4">
+              <p className="text-sm font-medium text-foreground mb-3">
+                Demo Access (For Reviewers)
+              </p>
+              <p className="text-xs text-foreground/60 mb-3">
+                Click to auto-fill credentials
+              </p>
+
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-foreground/80">Admin Account</div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("jayantharatnayake633@gmail.com");
+                    setPassword("admin@123");
+                  }}
+                  className="text-sm text-accent hover:opacity-80 transition"
+                >
+                  Use
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-foreground/80">
+                  Employee Account
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("lahirugreat35@gmail.com");
+                    setPassword("user@123");
+                  }}
+                  className="text-sm text-accent hover:opacity-80 transition"
+                >
+                  Use
+                </button>
+              </div>
+            </div>
             {/* SIGNUP LINK */}
             <p className="mt-6 text-sm text-center text-foreground/70">
               Don't have an account?{" "}
