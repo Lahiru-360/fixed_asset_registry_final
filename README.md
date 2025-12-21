@@ -150,8 +150,10 @@ Reports can be generated for any selected reporting period.
 ### Authentication
 
 * Firebase Authentication
+* Email Verification
 * Secure token-based access
 * Role-based authorization (Admin / Employee)
+* Forgot Password
 
 ---
 
