@@ -235,3 +235,5 @@ It demonstrates:
 * Serial number tracking
 * IFRS-aligned depreciation methods
 * Multi-currency support
+
+**Author**: Lahiru Hettiarachchi
