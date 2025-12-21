@@ -21,7 +21,7 @@ import {
 import { generateGRNPDF } from "../utils/generateGRN.js";
 import { generateProductionGRN } from "../utils/grnNumberGenerator.js";
 import { generateProductionPO } from "../utils/poNumberGenerator.js";
-
+import { downloadFileAsBuffer } from "../utils/supabaseStorage.js";
 import { updateRequestStatus } from "../models/adminRequests.model.js";
 
 // CREATE PO IF NOT EXISTS
@@ -95,7 +95,7 @@ export async function createPurchaseOrder(req, res) {
   }
 }
 
-// DOWNLOAD PDF
+//  Download PO function
 export async function downloadPOPdf(req, res) {
   const { requestId } = req.params;
 
@@ -104,18 +104,19 @@ export async function downloadPOPdf(req, res) {
     return res.status(404).json({ error: "PO not found" });
   }
 
-  let filePath = po.pdf_path;
-
-  // If PDF does not exist, generate it
-  if (!filePath || !fs.existsSync(filePath)) {
-    filePath = await generatePurchaseOrderPDF(po);
-    await savePOPdfPathModel(po.po_id, filePath);
+  // If PDF URL doesn't exist, generate it
+  if (!po.pdf_path) {
+    const fileUrl = await generatePurchaseOrderPDF(po);
+    await savePOPdfPathModel(po.po_id, fileUrl);
+    po.pdf_path = fileUrl;
   }
 
-  return res.download(filePath);
+  // Redirect to Supabase Storage URL (if public)
+  // Or fetch and serve (if private)
+  return res.redirect(po.pdf_path);
 }
 
-// SEND EMAIL
+// Send PO Email function
 export async function sendPOEmail(req, res) {
   const { requestId } = req.params;
   const adminId = req.user.employee_id;
@@ -124,17 +125,23 @@ export async function sendPOEmail(req, res) {
     const po = await getPurchaseOrderByRequestIdModel(requestId);
     if (!po) return res.status(404).json({ error: "PO not found" });
 
-    // generate PDF if not exists
-    if (!po.pdf_path || !fs.existsSync(po.pdf_path)) {
-      const pdfPath = await generatePurchaseOrderPDF(po);
-      await savePOPdfPathModel(po.po_id, pdfPath);
-      po.pdf_path = pdfPath;
+    // Generate PDF if not exists
+    if (!po.pdf_path) {
+      const fileUrl = await generatePurchaseOrderPDF(po);
+      await savePOPdfPathModel(po.po_id, fileUrl);
+      po.pdf_path = fileUrl;
     }
 
-    await sendPurchaseOrderEmail(po);
+    // Extract file name from URL
+    const fileName = po.pdf_path.split("/").pop();
+
+    // Download PDF from Supabase Storage for email attachment
+    const pdfBuffer = await downloadFileAsBuffer(fileName, "po-pdfs");
+
+    // Update sendPurchaseOrderEmail to accept buffer
+    await sendPurchaseOrderEmail(po, pdfBuffer);
 
     await updateRequestStatus(requestId, "Purchase Order Sent", adminId);
-
     await markPOSentModel(po.po_id);
 
     return res.json({ message: "PO sent successfully" });
@@ -187,6 +194,7 @@ export async function confirmPOReceived(req, res) {
   }
 }
 
+// Update downloadGRN function
 export async function downloadGRN(req, res) {
   const { requestId } = req.params;
 
@@ -194,11 +202,8 @@ export async function downloadGRN(req, res) {
     const grn = await getGRNByRequestIdModel(requestId);
     if (!grn) return res.status(404).json({ error: "GRN not found" });
 
-    if (!fs.existsSync(grn.pdf_path)) {
-      return res.status(404).json({ error: "GRN file missing from server" });
-    }
-
-    return res.download(grn.pdf_path);
+    // Redirect to Supabase Storage URL
+    return res.redirect(grn.pdf_path);
   } catch (err) {
     console.error("GRN download error:", err);
     return res.status(500).json({ error: "Server error" });

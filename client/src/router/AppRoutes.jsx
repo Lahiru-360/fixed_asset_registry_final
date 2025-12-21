@@ -12,6 +12,7 @@ const ForgotPasswordPage = lazy(() => import("../pages/ForgotPasswordPage"));
 const PurchaseOrderPage = lazy(() => import("../pages/PurchaseOrderPage"));
 const AssetRegistryPage = lazy(() => import("../pages/AssetRegistryPage"));
 const DepreciationPage = lazy(() => import("../pages/DepreciationPage"));
+const AdminDashboard = lazy(() => import("../pages/AdminDashboard"));
 const SOFP = lazy(() => import("../pages/SOFPPage"));
 
 export const appRoutes = [
@@ -33,6 +34,12 @@ export const appRoutes = [
   {
     path: "/admin/requests",
     component: AdminRequestsPage,
+    requiresAuth: true,
+    allowedRoles: ["admin"],
+  },
+  {
+    path: "/admin/dashboard",
+    component: AdminDashboard,
     requiresAuth: true,
     allowedRoles: ["admin"],
   },

@@ -7,8 +7,11 @@ import {
   updateQuotationModel,
   deleteQuotationModel,
 } from "../models/quotations.model.js";
+import {
+  uploadFileToStorage,
+  deleteFileFromStorage,
+} from "../utils/supabaseStorage.js";
 import path from "path";
-import fs from "fs";
 
 async function ensureRequestIsNotLocked(requestId) {
   const reqRow = await getRequestSummaryModel(requestId);
@@ -80,7 +83,16 @@ export async function uploadQuotation(req, res) {
       return res.status(400).json({ error: "File is required" });
     }
 
-    const fileUrl = `/api/files/${req.file.filename}`;
+    // Upload to Supabase Storage
+    const fileName = `${Date.now()}-${Math.round(
+      Math.random() * 1e9
+    )}${path.extname(req.file.originalname)}`;
+    const fileUrl = await uploadFileToStorage(
+      req.file.buffer,
+      fileName,
+      "quotations",
+      req.file.mimetype
+    );
 
     const quotation = await createQuotationModel(
       id,
@@ -149,13 +161,32 @@ export async function updateQuotation(req, res) {
     let fileUrl = null;
 
     if (req.file) {
-      // If a new file was uploaded, delete old file
-      const oldFile = existing.file_url.replace("/api/files/", "");
-      const oldPath = path.join(process.cwd(), "uploads", oldFile);
+      // If a new file was uploaded, delete old file from Supabase Storage
+      if (existing.file_url) {
+        try {
+          // Extract filename from Supabase URL
+          // URL format: https://[project].supabase.co/storage/v1/object/public/quotations/filename.pdf
+          const urlParts = existing.file_url.split("/");
+          const fileName = urlParts[urlParts.length - 1];
 
-      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+          // Delete old file from Supabase Storage
+          await deleteFileFromStorage(fileName, "quotations");
+        } catch (deleteError) {
+          // Log error but continue with upload (old file might not exist)
+          console.warn("Could not delete old file from Supabase:", deleteError);
+        }
+      }
 
-      fileUrl = `/api/files/${req.file.filename}`;
+      // Upload new file to Supabase Storage
+      const fileName = `${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}${path.extname(req.file.originalname)}`;
+      fileUrl = await uploadFileToStorage(
+        req.file.buffer,
+        fileName,
+        "quotations",
+        req.file.mimetype
+      );
     }
 
     const updatedQuotation = await updateQuotationModel(
@@ -198,10 +229,24 @@ export async function deleteQuotation(req, res) {
       return res.status(404).json({ error: "Quotation not found" });
     }
 
-    const filename = deleted.file_url.replace("/api/files/", "");
-    const filepath = path.join(process.cwd(), "uploads", filename);
+    // Delete file from Supabase Storage
+    if (deleted.file_url) {
+      try {
+        // Extract filename from Supabase URL
+        // URL format: https://[project].supabase.co/storage/v1/object/public/quotations/filename.pdf
+        const urlParts = deleted.file_url.split("/");
+        const fileName = urlParts[urlParts.length - 1];
 
-    if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+        // Delete file from Supabase Storage
+        await deleteFileFromStorage(fileName, "quotations");
+      } catch (deleteError) {
+        // Log error but continue (file might not exist in storage)
+        console.warn(
+          "Could not delete file from Supabase Storage:",
+          deleteError
+        );
+      }
+    }
 
     return res.json({ message: "Quotation deleted" });
   } catch (err) {

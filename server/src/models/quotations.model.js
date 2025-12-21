@@ -101,7 +101,7 @@ export async function updateQuotationModel(
       `UPDATE quotations
        SET vendor_name = $1,
            vendor_email = $2,
-           asset_name = $3
+           asset_name = $3,
            price = $4,
            file_url = $5
        WHERE quotation_id = $6

@@ -59,10 +59,6 @@ async function buildSOFP(year, month) {
 export async function getSOFP(req, res) {
   const { year, month } = req.query;
 
-  if (!year || !month) {
-    return res.status(400).json({ error: "Year and month are required" });
-  }
-
   try {
     const payload = await buildSOFP(Number(year), Number(month));
     return res.json(payload);
@@ -81,8 +77,15 @@ export async function downloadSOFPPDF(req, res) {
 
   try {
     const payload = await buildSOFP(Number(year), Number(month));
-    const pdfPath = await generateSOFPPDF(payload);
-    return res.download(pdfPath);
+    const pdfBuffer = await generateSOFPPDF(payload);
+
+    // Set headers for PDF download
+    const fileName = `SOFP-${year}-${String(month).padStart(2, "0")}.pdf`;
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+
+    // Send PDF buffer directly to client
+    return res.send(pdfBuffer);
   } catch (err) {
     console.error("SOFP PDF error:", err);
     return res.status(500).json({ error: "Server error" });

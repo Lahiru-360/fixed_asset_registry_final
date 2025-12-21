@@ -1,22 +1,27 @@
 import PDFDocument from "pdfkit";
-import fs from "fs";
-import path from "path";
 
 export function generateSOFPPDF(sofpData) {
   return new Promise((resolve, reject) => {
-    const pdfDir = path.join(process.cwd(), "uploads", "sofp_pdfs");
-    if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
-
-    const filePath = path.join(pdfDir, `SOFP-${sofpData.as_of}.pdf`);
-
     const doc = new PDFDocument({
       size: "A4",
       margin: 50,
       bufferPages: true,
     });
 
-    const stream = fs.createWriteStream(filePath);
-    doc.pipe(stream);
+    // Store PDF chunks in memory instead of filesystem
+    const chunks = [];
+    doc.on("data", (chunk) => chunks.push(chunk));
+
+    doc.on("end", () => {
+      try {
+        const pdfBuffer = Buffer.concat(chunks);
+        resolve(pdfBuffer); // Return buffer instead of file path
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    doc.on("error", reject);
 
     const pageWidth =
       doc.page.width - doc.page.margins.left - doc.page.margins.right;
@@ -246,8 +251,5 @@ export function generateSOFPPDF(sofpData) {
     );
 
     doc.end();
-
-    stream.on("finish", () => resolve(filePath));
-    stream.on("error", reject);
   });
 }

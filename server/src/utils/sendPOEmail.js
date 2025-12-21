@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
-import fs from "fs";
 
-export async function sendPurchaseOrderEmail(po) {
+export async function sendPurchaseOrderEmail(po, pdfBuffer) {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
@@ -20,7 +19,7 @@ export async function sendPurchaseOrderEmail(po) {
     attachments: [
       {
         filename: `${po.po_number}.pdf`,
-        path: po.pdf_path,
+        content: pdfBuffer, // Use buffer instead of path
       },
     ],
   });

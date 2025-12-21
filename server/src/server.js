@@ -5,7 +5,6 @@ import { corsOptions } from "./config/corsOptions.js";
 import authRoutes from "./routes/authRoutes.js";
 import assetRequestRoutes from "./routes/assetRequestRoutes.js";
 import adminRequestRoutes from "./routes/adminRequests.routes.js";
-import fileRoutes from "./routes/file.routes.js";
 import adminPurchaseOrder from "./routes/adminPurchaseOrder.routes.js";
 import adminAssetsRoutes from "./routes/adminAssets.routes.js";
 import adminAssetsCategories from "./routes/assetCategories.routes.js";
@@ -29,7 +28,6 @@ app.use("/api/admin/categories", adminAssetsCategories);
 app.use("/api/admin/depreciation", adminDepreciationRoutes);
 app.use("/api/admin/sofp", SOFPRoutes);
 app.use("/api/admin", adminRequestRoutes);
-app.use("/api/files", fileRoutes);
 app.use("/api/admin", adminPurchaseOrder);
 app.use("/api/admin", adminAssetsRoutes);
 

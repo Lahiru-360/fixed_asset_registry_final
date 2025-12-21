@@ -1,22 +1,37 @@
 import PDFDocument from "pdfkit";
-import fs from "fs";
-import path from "path";
+import { uploadPDFToStorage } from "./supabaseStorage.js";
 
 export function generateGRNPDF(po, grnNumber) {
   return new Promise((resolve, reject) => {
-    const pdfDir = path.join(process.cwd(), "uploads", "grn_pdfs");
-    if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
-
-    const filePath = path.join(pdfDir, `${grnNumber}.pdf`);
-
     const doc = new PDFDocument({
       size: "A4",
       margin: 50,
       bufferPages: true,
     });
 
-    const stream = fs.createWriteStream(filePath);
-    doc.pipe(stream);
+    // Store PDF chunks in memory
+    const chunks = [];
+    doc.on("data", (chunk) => chunks.push(chunk));
+
+    doc.on("end", async () => {
+      try {
+        const pdfBuffer = Buffer.concat(chunks);
+        const fileName = `${grnNumber}.pdf`;
+
+        // Upload to Supabase Storage
+        const fileUrl = await uploadPDFToStorage(
+          pdfBuffer,
+          fileName,
+          "grn-pdfs"
+        );
+
+        resolve(fileUrl); // Return Supabase Storage URL
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    doc.on("error", reject);
 
     const pageWidth =
       doc.page.width - doc.page.margins.left - doc.page.margins.right;
@@ -191,8 +206,5 @@ export function generateGRNPDF(po, grnNumber) {
       );
 
     doc.end();
-
-    stream.on("finish", () => resolve(filePath));
-    stream.on("error", reject);
   });
 }
