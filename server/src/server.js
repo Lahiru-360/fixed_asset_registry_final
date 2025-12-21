@@ -1,3 +1,5 @@
+console.log("BOOT STEP 1: file loaded");
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -36,6 +38,7 @@ app.use("/api/admin", adminRequestRoutes);
 app.use("/api/admin", adminPurchaseOrder);
 app.use("/api/admin", adminAssetsRoutes);
 
+console.log("BOOT STEP 2: about to listen");
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
