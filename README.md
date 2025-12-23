@@ -236,4 +236,4 @@ It demonstrates:
 * IFRS-aligned depreciation methods
 * Multi-currency support
 
-**Author**: Lahiru Hettiarachchi
+**Author**: Lahiru Hettiarachchi (Developer)
