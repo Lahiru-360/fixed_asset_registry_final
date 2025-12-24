@@ -29,6 +29,7 @@ function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [passwordStrength, setPasswordStrength] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -142,6 +143,7 @@ function RegisterPage() {
 
     if (!isFormValid) return;
 
+    setIsSubmitting(true);
     try {
       // 1️⃣ Create user in Firebase Auth
       const firebaseUser = await registerFirebase(email, password);
@@ -191,6 +193,8 @@ function RegisterPage() {
       }
 
       toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -456,15 +460,41 @@ function RegisterPage() {
             {/* SUBMIT */}
             <button
               type="submit"
-              disabled={!isFormValid}
+              disabled={!isFormValid || isSubmitting}
               className={`w-full py-3 rounded-xl font-semibold shadow-md transition-all duration-200 
                 ${
-                  isFormValid
+                  isFormValid && !isSubmitting
                     ? "bg-primary text-primary-foreground hover:opacity-90 hover:scale-[1.02]"
                     : "bg-muted text-foreground/40 cursor-not-allowed"
                 }`}
             >
-              Create Account
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Creating Account...
+                </span>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 
