@@ -150,8 +150,10 @@ Reports can be generated for any selected reporting period.
 ### Authentication
 
 * Firebase Authentication
+* Email Verification
 * Secure token-based access
 * Role-based authorization (Admin / Employee)
+* Forgot Password
 
 ---
 
@@ -233,3 +235,5 @@ It demonstrates:
 * Serial number tracking
 * IFRS-aligned depreciation methods
 * Multi-currency support
+
+**Author**: Lahiru Hettiarachchi (Developer)
