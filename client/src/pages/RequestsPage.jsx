@@ -10,6 +10,7 @@ import { useSearchParams } from "react-router-dom";
 
 export default function RequestsPage() {
   const [requests, setRequests] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(false);
   const { user, loading } = useAuth();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,6 +39,7 @@ export default function RequestsPage() {
   }, [searchQuery, statusFilter, sortOrder, page]);
 
   const fetchRequests = useCallback(async () => {
+    setRequestsLoading(true);
     try {
       const res = await axiosInstance.get("/api/admin/requests", {
         params: {
@@ -53,6 +55,8 @@ export default function RequestsPage() {
       setTotalPages(res.data.pagination?.totalPages || 1);
     } catch (err) {
       console.error("Failed to load requests:", err);
+    } finally {
+      setRequestsLoading(false);
     }
   }, [page, pageSize, searchQuery, statusFilter, sortOrder]);
 
@@ -116,7 +120,11 @@ export default function RequestsPage() {
             </div>
           </div>
 
-          <RequestsTable data={requests} onRefresh={fetchRequests} />
+          <RequestsTable
+            data={requests}
+            onRefresh={fetchRequests}
+            loading={requestsLoading}
+          />
         </section>
         <div className="flex justify-center items-center mt-4">
           {/* Previous Button - Left */}

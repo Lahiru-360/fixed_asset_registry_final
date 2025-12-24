@@ -14,7 +14,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-export default function RequestsTable({ data, onRefresh }) {
+export default function RequestsTable({ data, onRefresh, loading = false }) {
   const [loadingId, setLoadingId] = useState(null);
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -97,6 +97,14 @@ export default function RequestsTable({ data, onRefresh }) {
       </span>
     );
   };
+
+  if (loading) {
+    return (
+      <p className="text-sm text-muted-foreground py-8 text-center">
+        Loading requests data…
+      </p>
+    );
+  }
 
   if (!data.length) {
     return (
