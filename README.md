@@ -1,4 +1,4 @@
-# Fixed Asset Registry System
+# Fixed Asset Registry & Procurement Management System
 
 A full-stack **Fixed Asset Registry and Procurement Management System** designed to model real-world enterprise workflows, from employee asset requests through procurement, asset capitalization, depreciation, and financial reporting.
 
