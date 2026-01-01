@@ -1,9 +1,11 @@
 import { getAllAssetsModel } from "../models/assets.model.js";
 import { calculateDepreciation } from "../utils/depreciation.js";
 import { generateSOFPPDF } from "../utils/generateSOFPPDF.js";
+import { getAssetsByAcquisitionPeriodModel } from "../models/assets.model.js";
 
 async function buildSOFP(year, month) {
-  const assets = await getAllAssetsModel();
+  // const assets = await getAllAssetsModel();
+  const assets = await getAssetsByAcquisitionPeriodModel(year, month);
 
   const grouped = {};
 
