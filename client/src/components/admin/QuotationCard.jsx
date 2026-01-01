@@ -63,11 +63,19 @@ export default function QuotationCard({
     }
   };
 
+  const isSelectedQuotation = Boolean(quotation?.is_final);
+
+  const cardClasses = `bg-background rounded-xl p-5 hover:shadow-md transition-shadow border ${
+    isSelectedQuotation
+      ? "border-primary ring-2 ring-primary/30 shadow-lg"
+      : "border-muted"
+  }`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-background border border-muted rounded-xl p-5 hover:shadow-md transition-shadow"
+      className={cardClasses}
     >
       <div className="flex items-start justify-between mb-4">
         <div>
@@ -85,10 +93,17 @@ export default function QuotationCard({
           </p>
         </div>
 
-        <div className="text-right">
-          <div className="text-xs text-muted-foreground mb-1">Unit Price</div>
-          <div className="text-xl font-bold text-primary">
-            LKR {Number(quotation.price).toLocaleString()}
+        <div className="flex flex-col items-end gap-2">
+          {isSelectedQuotation && (
+            <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-primary bg-primary/10 border border-primary/30 rounded-full">
+              <CheckCircle2 className="w-4 h-4" /> Finalized
+            </span>
+          )}
+          <div className="text-right">
+            <div className="text-xs text-muted-foreground mb-1">Unit Price</div>
+            <div className="text-xl font-bold text-primary">
+              LKR {Number(quotation.price).toLocaleString()}
+            </div>
           </div>
         </div>
       </div>
