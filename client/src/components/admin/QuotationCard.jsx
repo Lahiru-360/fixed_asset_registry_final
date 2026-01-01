@@ -67,7 +67,7 @@ export default function QuotationCard({
 
   const cardClasses = `bg-background rounded-xl p-5 hover:shadow-md transition-shadow border ${
     isSelectedQuotation
-      ? "border-primary ring-2 ring-primary/30 shadow-lg"
+      ? "border-green-200 dark:border-green-950/20 ring-2 ring-green-200/30 shadow-lg"
       : "border-muted"
   }`;
 
@@ -95,7 +95,7 @@ export default function QuotationCard({
 
         <div className="flex flex-col items-end gap-2">
           {isSelectedQuotation && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-200 dark:bg-green-950/20 text-green-700 dark:text-green-400">
               <CheckCircle2 className="w-4 h-4" /> Finalized
             </span>
           )}

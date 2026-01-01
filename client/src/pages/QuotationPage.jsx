@@ -136,7 +136,7 @@ export default function QuotationPage() {
                   Pending Quotations
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-200 dark:bg-green-950/20 text-green-700 dark:text-green-400">
                   <FileCheck className="w-3.5 h-3.5" />
                   Quotation Finalized
                 </span>
