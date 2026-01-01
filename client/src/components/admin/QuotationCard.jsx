@@ -95,7 +95,7 @@ export default function QuotationCard({
 
         <div className="flex flex-col items-end gap-2">
           {isSelectedQuotation && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-primary bg-primary/10 border border-primary/30 rounded-full">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
               <CheckCircle2 className="w-4 h-4" /> Finalized
             </span>
           )}

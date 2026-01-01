@@ -315,50 +315,49 @@ export default function DepreciationPage() {
               </div>
             </>
           )}
-
-          <div className="flex justify-center items-center mt-4">
-            {/* Previous Button - Left */}
-            <button
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-              className="inline-flex items-center gap-1.5
-      px-2.5 py-1.5
-      rounded-md
-      text-sm font-medium
-      text-primary
-      border border-primary/30
-      hover:bg-primary/10
-      hover:border-primary/60
-      active:scale-[0.97]
-      transition disabled:opacity-50"
-            >
-              Previous
-            </button>
-
-            {/* Page Count - Center */}
-            <span className="text-sm text-muted-foreground  mx-3">
-              Page {page} of {Math.ceil(totalRows / limit)}
-            </span>
-
-            {/* Next Button - Right */}
-            <button
-              disabled={page >= Math.ceil(totalRows / limit)}
-              onClick={() => setPage((p) => p + 1)}
-              className="inline-flex items-center gap-1.5
-      px-2.5 py-1.5
-      rounded-md
-      text-sm font-medium
-      text-primary
-      border border-primary/30
-      hover:bg-primary/10
-      hover:border-primary/60
-      active:scale-[0.97]
-      transition disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
         </section>
+        <div className="flex justify-center items-center mt-4">
+          {/* Previous Button - Left */}
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="inline-flex items-center gap-1.5
+      px-2.5 py-1.5
+      rounded-md
+      text-sm font-medium
+      text-primary
+      border border-primary/30
+      hover:bg-primary/10
+      hover:border-primary/60
+      active:scale-[0.97]
+      transition disabled:opacity-50"
+          >
+            Previous
+          </button>
+
+          {/* Page Count - Center */}
+          <span className="text-sm text-muted-foreground  mx-3">
+            Page {page} of {Math.ceil(totalRows / limit)}
+          </span>
+
+          {/* Next Button - Right */}
+          <button
+            disabled={page >= Math.ceil(totalRows / limit)}
+            onClick={() => setPage((p) => p + 1)}
+            className="inline-flex items-center gap-1.5
+      px-2.5 py-1.5
+      rounded-md
+      text-sm font-medium
+      text-primary
+      border border-primary/30
+      hover:bg-primary/10
+      hover:border-primary/60
+      active:scale-[0.97]
+      transition disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </AdminLayout>
   );
